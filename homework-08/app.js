@@ -76,7 +76,7 @@ function createPictureGalleryMarkup(pictures) {
   return pictures.map(({ preview, original, description }) => {
     return `
   <li class="gallery__item">
-  <a
+  <a target="_blank"
     class="gallery__link"
     href="${original}"
   >
@@ -93,24 +93,70 @@ function createPictureGalleryMarkup(pictures) {
 
 // 2) Реализация делегирования на галерее ul.js - gallery и получение url большого изображения.
 
+// 3) Открытие модального окна по клику на элементе галереи.
+
+const modalEl = document.querySelector('.js-lightbox');
+const modalPicture = document.querySelector('.lightbox__image');
+
 pictureContainer.addEventListener('click', onPictureContainerClick);
 
-const isGalleryItemEl = e.target.classList.contains('gallery__image');
-
 function onPictureContainerClick(e) {
-  if (!isGalleryItemEl) {
-    return;
-  };
 
-  const modalEl = document.querySelector('js-lightbox');
+  e.preventDefault();
 
-  modalEl.classList.add('.lightbox.is-open');
+  isOpenModal(e);
+
+  onEnterOpener(e);
 
   console.log(e.target.dataset.source);
 };
 
-// 3) Открытие модального окна по клику на элементе галереи.
+function isOpenModal(e) {
+  modalEl.classList.add('is-open');
+  modalPicture.alt = e.target.alt;
+  modalPicture.src = e.target.dataset.source;
+};
 
-// const modalEl = document.querySelector('js-lightbox');
+function onEnterOpener(e) {
+  console.log(e.key);
+  if (e.key !== "Enter") {
+    return
+  }
+  isOpenModal(e);
+}
 
-// modalEl.classList.add('.lightbox.is-open');
+// 4) Закрытие модального окна по клику на кнопку button[data - action= "close-lightbox"].
+// 5) Очистка значения атрибута src элемента img.lightbox__image.Это необходимо для того, чтобы при следующем открытии модального окна, пока грузится изображение, мы не видели предыдущее.
+
+const closeButtonRef = document.querySelector('.lightbox__button');
+closeButtonRef.addEventListener('click', onButtonClose);
+
+function onButtonClose() {
+  modalEl.classList.remove('is-open');
+  modalPicture.alt = ' ';
+  modalPicture.src = ' ';
+}
+
+// 6) Закрытие модального окна по клику на div.lightbox__overlay.
+
+modalEl.addEventListener('click', onOverlayClickCloseModal);
+
+function onOverlayClickCloseModal(e) {
+  e.preventDefault();
+
+  if (e.target.nodeName === 'IMG') {
+    return;
+  }
+  modalEl.classList.remove('is-open');
+  modalPicture.alt = ' ';
+  modalPicture.src = ' ';
+
+}
+
+// 7) Закрытие модального окна по нажатию клавиши ESC.
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape') {
+    modalEl.classList.remove('is-open');
+  }
+});
