@@ -1,0 +1,20 @@
+{
+  "name": "goit-js-hw-08-gallery",
+  "version": "1.0.0",
+  "description": "hw-8-parcel",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "parcel src/index.html",
+    "build": "parcel build src/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/IrynaGumeniuk/goit-js-hw-08-gallery.git"
+  },
+  "author": "Iryna-Gumeniuk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/IrynaGumeniuk/goit-js-hw-08-gallery/issues"
+  },
+  "homepage": "https://github.com/IrynaGumeniuk/goit-js-hw-08-gallery#readme"
+}
